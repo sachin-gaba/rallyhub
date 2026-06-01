@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'feature/**', 'fix/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      - run: yarn install --frozen-lockfile
+      - run: yarn workspaces run lint
+      - run: yarn workspaces run test --passWithNoTests
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      - run: yarn install --frozen-lockfile
+      - name: Type check mobile
+        run: cd apps/mobile && npx tsc --noEmit
+      - name: Type check backend
+        run: cd apps/backend && npx tsc --noEmit
+      - name: Type check infra
+        run: cd infra && npx tsc --noEmit
