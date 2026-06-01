@@ -28,3 +28,12 @@ public class UserRepository {
 
     public void update(User user) { table().updateItem(user); }
 }
+
+    // Used by iCal feed lookup
+    public java.util.Optional<User> findByIcalToken(String icalToken) {
+        // Requires GSI: icalToken-index on users table
+        DynamoDbIndex<User> index = table().index("icalToken-index");
+        return index.query(software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.keyEqualTo(
+                Key.builder().partitionValue(icalToken).build()))
+                .stream().flatMap(p -> p.items().stream()).findFirst();
+    }

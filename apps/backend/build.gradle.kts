@@ -52,6 +52,9 @@ dependencies {
     // JWT — Cognito JWKS verification
     implementation("com.nimbusds:nimbus-jose-jwt:9.40")
 
+    // PDF generation (OpenPDF — LGPL, GraalVM-compatible)
+    implementation("com.github.librepdf:openpdf:1.3.43")
+
     // Logging
     runtimeOnly("ch.qos.logback:logback-classic")
 

@@ -7,6 +7,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,13 +22,12 @@ public class TournamentController {
                                    @PathVariable String clubId,
                                    @Body Map<String, Object> body) {
         try {
-            var ctx  = jwtAuthUtil.verify(auth);
-            int gs   = body.containsKey("groupSize") ? ((Number) body.get("groupSize")).intValue() : 4;
-            var t = tournamentService.createTournament(ctx.userId(), clubId,
+            var ctx = jwtAuthUtil.verify(auth);
+            int gs  = body.containsKey("groupSize") ? ((Number) body.get("groupSize")).intValue() : 4;
+            return HttpResponse.created(tournamentService.createTournament(ctx.userId(), clubId,
                     (String) body.get("name"), (String) body.get("format"),
                     (String) body.get("drawType"), (String) body.get("sport"),
-                    (List<String>) body.get("participantIds"), gs);
-            return HttpResponse.created(t);
+                    (List<String>) body.get("participantIds"), gs));
         } catch (RallyhubException e) { return toResponse(e); }
     }
 
@@ -39,9 +39,9 @@ public class TournamentController {
                                         @Body Map<String, Object> body) {
         try {
             var ctx = jwtAuthUtil.verify(auth);
-            int s1  = ((Number) body.get("scorePlayer1")).intValue();
-            int s2  = ((Number) body.get("scorePlayer2")).intValue();
-            return HttpResponse.ok(tournamentService.submitScore(ctx.userId(), clubId, tournamentId, matchId, s1, s2));
+            return HttpResponse.ok(tournamentService.submitScore(ctx.userId(), clubId, tournamentId, matchId,
+                    ((Number) body.get("scorePlayer1")).intValue(),
+                    ((Number) body.get("scorePlayer2")).intValue()));
         } catch (RallyhubException e) { return toResponse(e); }
     }
 
@@ -52,9 +52,35 @@ public class TournamentController {
                                     @PathVariable String matchId,
                                     @Body Map<String, Object> body) {
         try {
-            var ctx  = jwtAuthUtil.verify(auth);
-            String note = (String) body.getOrDefault("note", "");
-            return HttpResponse.ok(tournamentService.disputeScore(ctx.userId(), tournamentId, matchId, note));
+            var ctx = jwtAuthUtil.verify(auth);
+            return HttpResponse.ok(tournamentService.disputeScore(ctx.userId(), tournamentId, matchId,
+                    (String) body.getOrDefault("note", "")));
+        } catch (RallyhubException e) { return toResponse(e); }
+    }
+
+    @Post("/{tournamentId}/matches/{matchId}/resolve")
+    public HttpResponse<?> resolve(@Header("Authorization") String auth,
+                                    @PathVariable String clubId,
+                                    @PathVariable String tournamentId,
+                                    @PathVariable String matchId,
+                                    @Body Map<String, Object> body) {
+        try {
+            var ctx = jwtAuthUtil.verify(auth);
+            return HttpResponse.ok(tournamentService.resolveDispute(ctx.userId(), clubId, tournamentId, matchId,
+                    ((Number) body.get("scorePlayer1")).intValue(),
+                    ((Number) body.get("scorePlayer2")).intValue()));
+        } catch (RallyhubException e) { return toResponse(e); }
+    }
+
+    @Get("/{tournamentId}/groups/{groupId}/standings")
+    public HttpResponse<?> standings(@Header("Authorization") String auth,
+                                      @PathVariable String clubId,
+                                      @PathVariable String tournamentId,
+                                      @PathVariable String groupId) {
+        try {
+            jwtAuthUtil.verify(auth);
+            var table = tournamentService.calculateGroupStandings(tournamentId, groupId);
+            return HttpResponse.ok(Map.of("standings", table));
         } catch (RallyhubException e) { return toResponse(e); }
     }
 

@@ -103,6 +103,12 @@ export class RallyhubStack extends Stack {
       indexName: 'clubId-index',
       partitionKey: { name: 'clubId', type: AT },
     });
+    // users: iCal token lookup
+    tables.users.addGlobalSecondaryIndex({
+      indexName: "icalToken-index",
+      partitionKey: { name: "icalToken", type: AT },
+    });
+
     // join-requests: pending for a club
     tables.joinRequests.addGlobalSecondaryIndex({
       indexName: 'clubId-index',

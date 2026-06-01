@@ -104,6 +104,7 @@ public class MemberController {
             joinRequestRepository.update(req);
 
             if ("accepted".equals(decision)) {
+                    planService.enforceMemberCap(clubId);
                 membershipRepository.save(ClubMembership.builder()
                         .userId(req.getUserId()).clubId(clubId).role("inductee")
                         .creditBalance(0).paymentReference(clubId.substring(0, 4).toUpperCase() + "-" + req.getUserId().substring(0, 4).toUpperCase())

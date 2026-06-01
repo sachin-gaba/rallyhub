@@ -46,3 +46,10 @@ public class MembershipRepository {
         table().updateItem(membership);
     }
 }
+
+    // All clubs a user belongs to (used by iCal feed generation)
+    public java.util.List<ClubMembership> findByUserId(String userId) {
+        return table().query(software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.keyEqualTo(
+                Key.builder().partitionValue(userId).build()))
+                .items().stream().collect(java.util.stream.Collectors.toList());
+    }
