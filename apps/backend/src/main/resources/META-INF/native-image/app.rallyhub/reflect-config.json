@@ -1,0 +1,8 @@
+[
+  {"name":"com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent","allDeclaredFields":true,"allDeclaredMethods":true,"allDeclaredConstructors":true},
+  {"name":"com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent","allDeclaredFields":true,"allDeclaredMethods":true,"allDeclaredConstructors":true},
+  {"name":"software.amazon.awssdk.services.dynamodb.model.AttributeValue","allDeclaredFields":true,"allDeclaredMethods":true,"allDeclaredConstructors":true},
+  {"name":"software.amazon.awssdk.enhanced.dynamodb.internal.mapper.BeanTableSchemaAttributeTags","allDeclaredFields":true,"allDeclaredMethods":true},
+  {"name":"com.nimbusds.jose.proc.JWSVerificationKeySelector","allDeclaredFields":true,"allDeclaredMethods":true,"allDeclaredConstructors":true},
+  {"name":"com.nimbusds.jwt.proc.DefaultJWTProcessor","allDeclaredFields":true,"allDeclaredMethods":true,"allDeclaredConstructors":true}
+]

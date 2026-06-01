@@ -1,3 +1,4 @@
+import io.micronaut.core.annotation.Introspected;
 package app.rallyhub.domain.model;
 
 import lombok.*;
@@ -9,6 +10,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Introspected
 @DynamoDbBean
 public class Tournament {
 
@@ -26,20 +28,23 @@ public class Tournament {
     private List<String> tiebreakerOrder;
     private Instant createdAt;
 
-    @Data @Builder @NoArgsConstructor @AllArgsConstructor @DynamoDbBean
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor @Introspected
+@DynamoDbBean
     public static class Participant {
         private String userId;
         private String skillTier;
     }
 
-    @Data @Builder @NoArgsConstructor @AllArgsConstructor @DynamoDbBean
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor @Introspected
+@DynamoDbBean
     public static class TournamentGroup {
         private String id;
         private String name;
         private List<String> participantIds;
     }
 
-    @Data @Builder @NoArgsConstructor @AllArgsConstructor @DynamoDbBean
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor @Introspected
+@DynamoDbBean
     public static class Match {
         private String id;
         private String round;      // e.g. group_a, qf, sf, final

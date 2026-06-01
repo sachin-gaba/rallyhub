@@ -7,67 +7,71 @@ on:
     branches: [main]
 
 jobs:
-  # ── Java Backend ──────────────────────────────────────────────
-  backend-build-test:
-    name: Backend — Build & Test (Java 21)
+  backend-test:
+    name: Backend — Test (GraalVM JDK 21)
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: apps/backend
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: graalvm/setup-graalvm@v1
         with:
           java-version: '21'
-          distribution: 'temurin'
+          distribution: 'graalvm-community'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: gradle
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew build -x test
-      - name: Test
-        run: ./gradlew test
-      - name: Upload test report
+      - run: chmod +x gradlew
+      - run: ./gradlew test
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
           name: backend-test-report
           path: apps/backend/build/reports/tests/
 
-  # ── Mobile type-check ─────────────────────────────────────────
-  mobile-type-check:
-    name: Mobile — Type Check
+  backend-native-build:
+    name: Backend — GraalVM native compile
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: apps/mobile
+        working-directory: apps/backend
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: graalvm/setup-graalvm@v1
         with:
-          node-version: '20'
-          cache: 'yarn'
-      - run: yarn install --frozen-lockfile
-        working-directory: .
-      - run: npx tsc --noEmit
+          java-version: '21'
+          distribution: 'graalvm-community'
+          native-image-job-reports: 'true'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: gradle
+      - run: chmod +x gradlew
+      - run: ./gradlew nativeCompile
+      - run: ./gradlew packageNative
+      - uses: actions/upload-artifact@v4
+        with:
+          name: function-zip
+          path: apps/backend/build/function.zip
 
-  # ── Infra type-check ──────────────────────────────────────────
-  infra-synth:
-    name: Infra — CDK Synth
+  mobile-type-check:
+    name: Mobile — TypeScript check
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: infra
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
+          cache: yarn
       - run: yarn install --frozen-lockfile
-        working-directory: .
-      - run: npx tsc --noEmit
-      - run: npx cdk synth --app "npx ts-node lib/app.ts" 2>/dev/null || true
-        env:
-          CDK_DEFAULT_ACCOUNT: '000000000000'
-          CDK_DEFAULT_REGION: eu-west-1
+      - run: cd apps/mobile && npx tsc --noEmit
+
+  infra-synth:
+    name: Infra — CDK synth
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: cd infra && npx tsc --noEmit

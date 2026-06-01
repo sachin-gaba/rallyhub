@@ -2,16 +2,12 @@ package app.rallyhub.util;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import jakarta.inject.Singleton;
 
 import java.util.Map;
 
-@Component
-@RequiredArgsConstructor
+@Singleton
 public class ApiResponse {
-
-    private final ObjectMapper mapper;
 
     private static final Map<String, String> CORS = Map.of(
             "Access-Control-Allow-Origin",  "*",
@@ -19,16 +15,22 @@ public class ApiResponse {
             "Access-Control-Allow-Headers", "Content-Type,Authorization"
     );
 
-    public APIGatewayProxyResponseEvent ok(Object data) {
-        return ok(data, 200);
+    private final ObjectMapper mapper;
+
+    public ApiResponse(ObjectMapper mapper) {
+        this.mapper = mapper;
     }
 
-    public APIGatewayProxyResponseEvent ok(Object data, int status) {
-        return build(status, Map.of("data", data));
+    public APIGatewayProxyResponseEvent ok(Object data) {
+        return build(200, Map.of("data", data));
     }
 
     public APIGatewayProxyResponseEvent created(Object data) {
-        return ok(data, 201);
+        return build(201, Map.of("data", data));
+    }
+
+    public APIGatewayProxyResponseEvent noContent() {
+        return new APIGatewayProxyResponseEvent().withStatusCode(204).withHeaders(CORS).withBody("");
     }
 
     public APIGatewayProxyResponseEvent error(String code, String message, int status) {
@@ -42,10 +44,8 @@ public class ApiResponse {
                     .withHeaders(CORS)
                     .withBody(mapper.writeValueAsString(body));
         } catch (Exception e) {
-            return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(500)
-                    .withHeaders(CORS)
-                    .withBody("{\"error\":{\"code\":\"SERIALIZATION\",\"message\":\"Response serialization failed\"}}");
+            return new APIGatewayProxyResponseEvent().withStatusCode(500).withHeaders(CORS)
+                    .withBody("{\"error\":{\"code\":\"SERIALIZATION\",\"message\":\"Serialization failed\"}}");
         }
     }
 }

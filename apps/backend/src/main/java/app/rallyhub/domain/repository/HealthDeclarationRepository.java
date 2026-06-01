@@ -1,14 +1,15 @@
+import jakarta.inject.Singleton;
 package app.rallyhub.domain.repository;
 
 import app.rallyhub.config.DynamoTableConfig;
 import app.rallyhub.domain.model.HealthDeclaration;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+
 import software.amazon.awssdk.enhanced.dynamodb.*;
 
 import java.util.Optional;
 
-@Repository
+@Singleton
 @RequiredArgsConstructor
 public class HealthDeclarationRepository {
 

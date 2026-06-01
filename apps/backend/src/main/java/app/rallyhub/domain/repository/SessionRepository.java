@@ -1,16 +1,17 @@
+import jakarta.inject.Singleton;
 package app.rallyhub.domain.repository;
 
 import app.rallyhub.config.DynamoTableConfig;
 import app.rallyhub.domain.model.Session;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+
 import software.amazon.awssdk.enhanced.dynamodb.*;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Repository
+@Singleton
 @RequiredArgsConstructor
 public class SessionRepository {
 

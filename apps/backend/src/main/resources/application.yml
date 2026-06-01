@@ -1,8 +1,8 @@
-spring:
+micronaut:
   application:
     name: rallyhub-backend
-  main:
-    web-application-type: none  # serverless — no embedded server
+  server:
+    port: 8080
 
 rallyhub:
   aws:
@@ -10,21 +10,23 @@ rallyhub:
   cognito:
     user-pool-id: ${COGNITO_USER_POOL_ID}
     client-id:    ${COGNITO_CLIENT_ID}
-  dynamodb:
-    table:
-      users:        ${TABLE_USERS:rallyhub-users}
-      clubs:        ${TABLE_CLUBS:rallyhub-clubs}
-      memberships:  ${TABLE_MEMBERSHIPS:rallyhub-memberships}
-      sessions:     ${TABLE_SESSIONS:rallyhub-sessions}
-      schedules:    ${TABLE_SCHEDULES:rallyhub-schedules}
-      ledger:       ${TABLE_LEDGER:rallyhub-ledger}
-      tournaments:  ${TABLE_TOURNAMENTS:rallyhub-tournaments}
-      declarations: ${TABLE_DECLARATIONS:rallyhub-declarations}
-      payments:     ${TABLE_PAYMENTS:rallyhub-payments}
   sns:
     topic-arn: ${SNS_TOPIC_ARN:}
+  dynamodb:
+    table:
+      users:         ${TABLE_USERS:rallyhub-users}
+      clubs:         ${TABLE_CLUBS:rallyhub-clubs}
+      memberships:   ${TABLE_MEMBERSHIPS:rallyhub-memberships}
+      sessions:      ${TABLE_SESSIONS:rallyhub-sessions}
+      schedules:     ${TABLE_SCHEDULES:rallyhub-schedules}
+      ledger:        ${TABLE_LEDGER:rallyhub-ledger}
+      tournaments:   ${TABLE_TOURNAMENTS:rallyhub-tournaments}
+      declarations:  ${TABLE_DECLARATIONS:rallyhub-declarations}
+      payments:      ${TABLE_PAYMENTS:rallyhub-payments}
+      announcements: ${TABLE_ANNOUNCEMENTS:rallyhub-announcements}
+      join-requests: ${TABLE_JOIN_REQUESTS:rallyhub-join-requests}
 
-logging:
-  level:
-    app.rallyhub: INFO
+logger:
+  levels:
+    app.rallyhub:           INFO
     software.amazon.awssdk: WARN

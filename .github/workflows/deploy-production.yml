@@ -5,27 +5,28 @@ on:
     tags: ['v*']
 
 jobs:
-  deploy-production:
+  deploy:
     runs-on: ubuntu-latest
     environment: production
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - uses: graalvm/setup-graalvm@v1
         with:
           java-version: '21'
-          distribution: 'temurin'
+          distribution: 'graalvm-community'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: gradle
-      - name: Build backend fat jar
+      - name: Build GraalVM native binary
         run: |
           chmod +x gradlew
-          ./gradlew shadowJar
+          ./gradlew test nativeCompile packageNative
         working-directory: apps/backend
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
+          cache: yarn
       - run: yarn install --frozen-lockfile
       - name: CDK deploy (production)
         run: cd infra && npx cdk deploy --all --context env=production --require-approval never
@@ -34,7 +35,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION:    eu-west-1
 
-      - name: Submit to App Store & Google Play
+      - name: EAS submit (App Store + Play Store)
         run: cd apps/mobile && npx eas submit --platform all --profile production --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

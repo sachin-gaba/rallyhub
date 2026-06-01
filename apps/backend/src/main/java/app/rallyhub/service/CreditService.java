@@ -1,16 +1,17 @@
+import jakarta.inject.Singleton;
 package app.rallyhub.service;
 
 import app.rallyhub.domain.model.*;
 import app.rallyhub.domain.repository.*;
 import app.rallyhub.exception.RallyhubException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+
 
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+@Singleton
 @RequiredArgsConstructor
 public class CreditService {
 

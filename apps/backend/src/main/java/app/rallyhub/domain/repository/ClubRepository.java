@@ -1,16 +1,17 @@
+import jakarta.inject.Singleton;
 package app.rallyhub.domain.repository;
 
 import app.rallyhub.config.DynamoTableConfig;
 import app.rallyhub.domain.model.Club;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+
 import software.amazon.awssdk.enhanced.dynamodb.*;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 import java.util.*;
 
-@Repository
+@Singleton
 @RequiredArgsConstructor
 public class ClubRepository {
 

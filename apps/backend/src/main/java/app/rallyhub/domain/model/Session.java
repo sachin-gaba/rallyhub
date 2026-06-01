@@ -1,3 +1,4 @@
+import io.micronaut.core.annotation.Introspected;
 package app.rallyhub.domain.model;
 
 import lombok.*;
@@ -10,6 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Introspected
 @DynamoDbBean
 public class Session {
 
@@ -29,7 +31,8 @@ public class Session {
     private String cancelledReason;
     private Instant createdAt;
 
-    @Data @Builder @NoArgsConstructor @AllArgsConstructor @DynamoDbBean
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor @Introspected
+@DynamoDbBean
     public static class Attendee {
         private String userId;
         private Instant bookedAt;
@@ -37,7 +40,8 @@ public class Session {
         private Integer creditsDeducted;
     }
 
-    @Data @Builder @NoArgsConstructor @AllArgsConstructor @DynamoDbBean
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor @Introspected
+@DynamoDbBean
     public static class WaitlistEntry {
         private String userId;
         private Instant joinedAt;
@@ -46,7 +50,8 @@ public class Session {
         private Instant windowExpiresAt;
     }
 
-    @Data @Builder @NoArgsConstructor @AllArgsConstructor @DynamoDbBean
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor @Introspected
+@DynamoDbBean
     public static class GuestLedgerEntry {
         private String id;
         private String guestName;

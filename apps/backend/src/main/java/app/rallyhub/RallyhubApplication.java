@@ -1,11 +1,11 @@
 package app.rallyhub;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io.micronaut.runtime.Micronaut;
+import io.micronaut.core.annotation.Introspected;
 
-@SpringBootApplication
+@Introspected
 public class RallyhubApplication {
     public static void main(String[] args) {
-        SpringApplication.run(RallyhubApplication.class, args);
+        Micronaut.run(RallyhubApplication.class, args);
     }
 }

@@ -1,3 +1,4 @@
+import io.micronaut.core.annotation.Introspected;
 package app.rallyhub.domain.model;
 
 import lombok.*;
@@ -8,6 +9,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Introspected
 @DynamoDbBean
 public class CreditLedgerEntry {
 

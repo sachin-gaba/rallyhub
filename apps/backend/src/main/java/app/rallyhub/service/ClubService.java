@@ -1,3 +1,4 @@
+import jakarta.inject.Singleton;
 package app.rallyhub.service;
 
 import app.rallyhub.domain.model.Club;
@@ -6,14 +7,14 @@ import app.rallyhub.domain.repository.ClubRepository;
 import app.rallyhub.domain.repository.MembershipRepository;
 import app.rallyhub.exception.RallyhubException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+@Singleton
 @RequiredArgsConstructor
 public class ClubService {
 

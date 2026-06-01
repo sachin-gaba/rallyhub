@@ -1,3 +1,4 @@
+import io.micronaut.core.annotation.Introspected;
 package app.rallyhub.domain.model;
 
 import lombok.*;
@@ -10,6 +11,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Introspected
 @DynamoDbBean
 public class HealthDeclaration {
 
@@ -32,7 +34,8 @@ public class HealthDeclaration {
     private String appVersion;
     private String pdfUrl;
 
-    @Data @Builder @NoArgsConstructor @AllArgsConstructor @DynamoDbBean
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor @Introspected
+@DynamoDbBean
     public static class EmergencyContact {
         private String fullName;
         private String relationship;

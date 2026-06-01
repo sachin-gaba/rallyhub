@@ -1,3 +1,4 @@
+import io.micronaut.core.annotation.Introspected;
 package app.rallyhub.domain.model;
 
 import lombok.*;
@@ -9,6 +10,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Introspected
 @DynamoDbBean
 public class Club {
 
@@ -31,7 +33,8 @@ public class Club {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    @DynamoDbBean
+    @Introspected
+@DynamoDbBean
     public static class ClubSettings {
         private int negativeCreditLimit;              // default -2
         private int guestSponsorLimitPerMonth;        // default 2
@@ -44,7 +47,8 @@ public class Club {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    @DynamoDbBean
+    @Introspected
+@DynamoDbBean
     public static class CancellationPolicy {
         private List<CancellationTier> tiers;
     }
@@ -53,7 +57,8 @@ public class Club {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    @DynamoDbBean
+    @Introspected
+@DynamoDbBean
     public static class CancellationTier {
         private int hoursBeforeSession;
         private int refundPercent;  // 0–100

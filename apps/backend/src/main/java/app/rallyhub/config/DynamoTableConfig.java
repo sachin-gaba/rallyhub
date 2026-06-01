@@ -1,12 +1,10 @@
 package app.rallyhub.config;
 
+import io.micronaut.context.annotation.ConfigurationProperties;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 @Data
-@Configuration
-@ConfigurationProperties(prefix = "rallyhub.dynamodb.table")
+@ConfigurationProperties("rallyhub.dynamodb.table")
 public class DynamoTableConfig {
     private String users;
     private String clubs;
@@ -17,4 +15,6 @@ public class DynamoTableConfig {
     private String tournaments;
     private String declarations;
     private String payments;
+    private String announcements;
+    private String joinRequests;
 }

@@ -1,3 +1,5 @@
+import io.micronaut.context.annotation.Value;
+import jakarta.inject.Singleton;
 package app.rallyhub.util;
 
 import app.rallyhub.exception.RallyhubException;
@@ -8,13 +10,13 @@ import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.JWSAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+
+
 
 import java.net.URL;
 import java.util.Map;
 
-@Component
+@Singleton
 public class JwtAuthUtil {
 
     private final String userPoolId;
