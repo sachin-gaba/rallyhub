@@ -1,0 +1,23 @@
+{
+  "name": "@rallyhub/infra",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy --all",
+    "deploy:staging": "cdk deploy --all --context env=staging",
+    "deploy:prod": "cdk deploy --all --context env=production",
+    "destroy": "cdk destroy --all",
+    "lint": "eslint lib --ext .ts"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.147.0",
+    "constructs": "^10.3.0",
+    "@rallyhub/shared": "*"
+  },
+  "devDependencies": {
+    "aws-cdk": "^2.147.0",
+    "typescript": "^5.4.0",
+    "@types/node": "^20.14.0"
+  }
+}
