@@ -1,0 +1,26 @@
+{
+  "name": "rallyhub",
+  "private": true,
+  "workspaces": [
+    "apps/mobile",
+    "apps/backend",
+    "infra",
+    "packages/shared"
+  ],
+  "scripts": {
+    "mobile": "yarn workspace @rallyhub/mobile start",
+    "backend:dev": "yarn workspace @rallyhub/backend dev",
+    "infra:synth": "yarn workspace @rallyhub/infra synth",
+    "infra:deploy": "yarn workspace @rallyhub/infra deploy",
+    "lint": "yarn workspaces run lint",
+    "test": "yarn workspaces run test",
+    "build": "yarn workspaces run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "yarn": ">=1.22.0"
+  }
+}

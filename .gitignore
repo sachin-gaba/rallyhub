@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+.expo/
+*.js.map
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+cdk.out/
+*.d.ts
+!packages/shared/src/**/*.d.ts
