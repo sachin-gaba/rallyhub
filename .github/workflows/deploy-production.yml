@@ -10,17 +10,25 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Build backend fat jar
+        run: |
+          chmod +x gradlew
+          ./gradlew shadowJar
+        working-directory: apps/backend
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-
-      - name: Build backend
-        run: cd apps/backend && yarn build
-
-      - name: Deploy CDK (production)
-        run: cd infra && yarn deploy:prod
+      - name: CDK deploy (production)
+        run: cd infra && npx cdk deploy --all --context env=production --require-approval never
         env:
           AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

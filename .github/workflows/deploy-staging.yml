@@ -10,23 +10,34 @@ jobs:
     environment: staging
     steps:
       - uses: actions/checkout@v4
+
+      # ── Build Java fat jar ─────────────────────────────────────
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Build backend fat jar
+        run: |
+          chmod +x gradlew
+          ./gradlew shadowJar
+        working-directory: apps/backend
+
+      # ── Deploy CDK ─────────────────────────────────────────────
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-
-      - name: Build backend
-        run: cd apps/backend && yarn build
-
-      - name: Deploy CDK (staging)
-        run: cd infra && yarn deploy:staging
+      - name: CDK deploy (staging)
+        run: cd infra && npx cdk deploy --all --context env=staging --require-approval never
         env:
           AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION:    eu-west-1
 
-      - name: Build & submit Expo (staging)
+      # ── Expo build ─────────────────────────────────────────────
+      - name: Expo EAS build (staging)
         run: cd apps/mobile && npx eas build --platform all --profile staging --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

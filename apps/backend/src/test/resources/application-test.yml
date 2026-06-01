@@ -1,0 +1,17 @@
+rallyhub:
+  aws:
+    region: us-east-1
+  cognito:
+    user-pool-id: test-pool
+    client-id: test-client
+  dynamodb:
+    table:
+      users: rallyhub-users-test
+      clubs: rallyhub-clubs-test
+      memberships: rallyhub-memberships-test
+      sessions: rallyhub-sessions-test
+      schedules: rallyhub-schedules-test
+      ledger: rallyhub-ledger-test
+      tournaments: rallyhub-tournaments-test
+      declarations: rallyhub-declarations-test
+      payments: rallyhub-payments-test

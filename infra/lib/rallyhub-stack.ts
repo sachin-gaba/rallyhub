@@ -93,23 +93,23 @@ export class RallyhubStack extends Stack {
 
     // ─── Lambda functions ───────────────────────────────────────
     const fnProps = (handler: string): lambda.FunctionProps => ({
-      runtime: lambda.Runtime.NODEJS_20_X,
-      code:    lambda.Code.fromAsset(path.join(__dirname, '../../apps/backend/dist')),
+      runtime: lambda.Runtime.JAVA_21,
+      code:    lambda.Code.fromAsset(path.join(__dirname, '../../apps/backend/build/libs/rallyhub-backend-1.0.0.jar')),
       handler,
       role: lambdaRole,
-      timeout: Duration.seconds(30),
-      memorySize: 256,
+      timeout: Duration.seconds(60),
+      memorySize: 512,
       environment: commonEnv,
     });
 
     const fns = {
-      getClub:             new lambda.Function(this, 'GetClub',             fnProps('handlers/clubs/getClub.handler')),
-      createClub:          new lambda.Function(this, 'CreateClub',          fnProps('handlers/clubs/createClub.handler')),
-      bookSession:         new lambda.Function(this, 'BookSession',         fnProps('handlers/sessions/bookSession.handler')),
-      joinWaitlist:        new lambda.Function(this, 'JoinWaitlist',        fnProps('handlers/sessions/joinWaitlist.handler')),
-      adjustCredit:        new lambda.Function(this, 'AdjustCredit',        fnProps('handlers/credits/adjustCredit.handler')),
-      createTournament:    new lambda.Function(this, 'CreateTournament',    fnProps('handlers/tournaments/createTournament.handler')),
-      submitDeclaration:   new lambda.Function(this, 'SubmitDeclaration',   fnProps('handlers/members/submitHealthDeclaration.handler')),
+      getClub:             new lambda.Function(this, 'GetClub',             fnProps('app.rallyhub.handler.ClubHandler::getClub')),
+      createClub:          new lambda.Function(this, 'CreateClub',          fnProps('app.rallyhub.handler.ClubHandler::createClub')),
+      bookSession:         new lambda.Function(this, 'BookSession',         fnProps('app.rallyhub.handler.SessionHandler::bookSession')),
+      joinWaitlist:        new lambda.Function(this, 'JoinWaitlist',        fnProps('app.rallyhub.handler.SessionHandler::joinWaitlist')),
+      adjustCredit:        new lambda.Function(this, 'AdjustCredit',        fnProps('app.rallyhub.handler.CreditHandler::adjustCredit')),
+      createTournament:    new lambda.Function(this, 'CreateTournament',    fnProps('app.rallyhub.handler.TournamentHandler::createTournament')),
+      submitDeclaration:   new lambda.Function(this, 'SubmitDeclaration',   fnProps('app.rallyhub.handler.HealthDeclarationHandler::submitHealthDeclaration')),
     };
 
     // ─── API Gateway ────────────────────────────────────────────
