@@ -162,6 +162,52 @@ public class SessionService {
         return session;
     }
 
+
+    public Session joinWaitlist(String userId, String clubId, String sessionId) {
+        Session session = getSessionOrThrow(sessionId);
+        getMemberOrThrow(userId, clubId); // verify membership
+
+        List<Session.WaitlistEntry> waitlist = mutable(session.getWaitlist());
+        if (waitlist.stream().anyMatch(w -> w.getUserId().equals(userId)))
+            throw RallyhubException.conflict("Already on waitlist");
+
+        waitlist.add(Session.WaitlistEntry.builder()
+                .userId(userId).joinedAt(Instant.now())
+                .position(waitlist.size() + 1).build());
+
+        session.setWaitlist(waitlist);
+        sessionRepository.update(session);
+        return session;
+    }
+
+    public Session confirmWaitlistSlot(String userId, String sessionId) {
+        Session session = getSessionOrThrow(sessionId);
+        List<Session.WaitlistEntry> waitlist = mutable(session.getWaitlist());
+        boolean onWaitlist = waitlist.stream().anyMatch(w -> w.getUserId().equals(userId));
+        if (!onWaitlist) throw RallyhubException.forbidden("Not on waitlist");
+
+        List<Session.Attendee> attendees = mutable(session.getAttendees());
+        attendees.add(Session.Attendee.builder().userId(userId).bookedAt(Instant.now()).build());
+        waitlist.removeIf(w -> w.getUserId().equals(userId));
+        for (int i = 0; i < waitlist.size(); i++) waitlist.get(i).setPosition(i + 1);
+
+        session.setAttendees(attendees);
+        session.setWaitlist(waitlist);
+        sessionRepository.update(session);
+        return session;
+    }
+
+    public Session leaveWaitlist(String userId, String sessionId) {
+        Session session = getSessionOrThrow(sessionId);
+        List<Session.WaitlistEntry> waitlist = mutable(session.getWaitlist());
+        if (!waitlist.removeIf(w -> w.getUserId().equals(userId)))
+            throw RallyhubException.notFound("Waitlist entry");
+        for (int i = 0; i < waitlist.size(); i++) waitlist.get(i).setPosition(i + 1);
+        session.setWaitlist(waitlist);
+        sessionRepository.update(session);
+        return session;
+    }
+
     public List<Session> listUpcoming(String clubId) {
         return sessionRepository.findByClubId(clubId).stream()
                 .filter(s -> "scheduled".equals(s.getStatus()))

@@ -55,8 +55,13 @@ dependencies {
     // PDF generation (OpenPDF — LGPL, GraalVM-compatible)
     implementation("com.github.librepdf:openpdf:1.3.43")
 
+    // Jackson (explicit — needed by ApiResponse ObjectMapper)
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
     // Logging
     runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.yaml:snakeyaml")
 
     // Testing — Lombok processors must come first here too
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")

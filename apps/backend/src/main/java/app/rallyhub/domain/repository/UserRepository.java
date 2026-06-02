@@ -1,5 +1,5 @@
-import jakarta.inject.Singleton;
 package app.rallyhub.domain.repository;
+import jakarta.inject.Singleton;
 
 import app.rallyhub.config.DynamoTableConfig;
 import app.rallyhub.domain.model.User;
@@ -27,7 +27,6 @@ public class UserRepository {
     }
 
     public void update(User user) { table().updateItem(user); }
-}
 
     // Used by iCal feed lookup
     public java.util.Optional<User> findByIcalToken(String icalToken) {
@@ -37,3 +36,5 @@ public class UserRepository {
                 Key.builder().partitionValue(icalToken).build()))
                 .stream().flatMap(p -> p.items().stream()).findFirst();
     }
+
+}

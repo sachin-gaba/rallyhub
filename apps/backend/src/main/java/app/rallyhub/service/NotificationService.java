@@ -1,9 +1,9 @@
-import jakarta.inject.Singleton;
 package app.rallyhub.service;
+import jakarta.inject.Singleton;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import io.micronaut.context.annotation.Value;
 
 import software.amazon.awssdk.services.ses.SesClient;
 import software.amazon.awssdk.services.ses.model.*;

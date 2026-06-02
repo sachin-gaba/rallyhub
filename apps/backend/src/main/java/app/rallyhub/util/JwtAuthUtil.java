@@ -1,6 +1,6 @@
+package app.rallyhub.util;
 import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
-package app.rallyhub.util;
 
 import app.rallyhub.exception.RallyhubException;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;

@@ -1,5 +1,5 @@
-import jakarta.inject.Singleton;
 package app.rallyhub.domain.repository;
+import jakarta.inject.Singleton;
 
 import app.rallyhub.config.DynamoTableConfig;
 import app.rallyhub.domain.model.ClubMembership;
@@ -45,7 +45,6 @@ public class MembershipRepository {
     public void update(ClubMembership membership) {
         table().updateItem(membership);
     }
-}
 
     // All clubs a user belongs to (used by iCal feed generation)
     public java.util.List<ClubMembership> findByUserId(String userId) {
@@ -53,3 +52,5 @@ public class MembershipRepository {
                 Key.builder().partitionValue(userId).build()))
                 .items().stream().collect(java.util.stream.Collectors.toList());
     }
+
+}

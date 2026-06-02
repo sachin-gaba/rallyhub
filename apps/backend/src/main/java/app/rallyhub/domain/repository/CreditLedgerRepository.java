@@ -1,5 +1,5 @@
-import jakarta.inject.Singleton;
 package app.rallyhub.domain.repository;
+import jakarta.inject.Singleton;
 
 import app.rallyhub.config.DynamoTableConfig;
 import app.rallyhub.domain.model.CreditLedgerEntry;

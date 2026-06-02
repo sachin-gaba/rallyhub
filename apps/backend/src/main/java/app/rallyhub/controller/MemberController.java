@@ -20,6 +20,7 @@ public class MemberController {
     @Inject UserRepository userRepository;
     @Inject NotificationService notificationService;
     @Inject HealthDeclarationService healthDeclarationService;
+    @Inject PlanService planService;
     @Inject JwtAuthUtil jwtAuthUtil;
 
     private static final List<String> ORG_ROLES =

@@ -1,5 +1,5 @@
-import io.micronaut.core.annotation.Introspected;
 package app.rallyhub.domain.model;
+import io.micronaut.core.annotation.Introspected;
 
 import lombok.*;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
@@ -14,7 +14,7 @@ import java.util.List;
 @DynamoDbBean
 public class Club {
 
-    @DynamoDbPartitionKey
+    @Getter(onMethod_ = {@DynamoDbPartitionKey})
     private String id;
 
     private String name;

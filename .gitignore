@@ -13,3 +13,6 @@ coverage/
 cdk.out/
 *.d.ts
 !packages/shared/src/**/*.d.ts
+.gradle/
+package-lock.json
+node_modules/

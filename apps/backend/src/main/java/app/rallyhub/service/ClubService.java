@@ -1,5 +1,5 @@
-import jakarta.inject.Singleton;
 package app.rallyhub.service;
+import jakarta.inject.Singleton;
 
 import app.rallyhub.domain.model.Club;
 import app.rallyhub.domain.model.ClubMembership;
