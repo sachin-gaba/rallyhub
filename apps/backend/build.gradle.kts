@@ -117,6 +117,7 @@ tasks.register<Zip>("packageNative") {
     description = "Zips the GraalVM native binary for Lambda deployment"
     dependsOn("nativeCompile")
     archiveFileName.set("function.zip")
+    destinationDirectory.set(layout.buildDirectory)   // -> build/function.zip (matches CDK asset path)
     from(layout.buildDirectory.file("native/nativeCompile/bootstrap"))
 }
 
