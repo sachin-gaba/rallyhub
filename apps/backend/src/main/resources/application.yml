@@ -6,7 +6,7 @@ micronaut:
 
 rallyhub:
   aws:
-    region: ${AWS_REGION:eu-west-1}
+    region: ${AWS_REGION:us-east-1}
   cognito:
     user-pool-id: ${COGNITO_USER_POOL_ID}
     client-id:    ${COGNITO_CLIENT_ID}
