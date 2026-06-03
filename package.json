@@ -1,26 +1,27 @@
 {
   "name": "rallyhub",
   "private": true,
-  "workspaces": [
-    "apps/mobile",
-    "apps/backend",
-    "infra",
-    "packages/shared"
-  ],
+  "workspaces": ["apps/mobile", "apps/backend", "infra", "packages/shared"],
   "scripts": {
-    "mobile": "yarn workspace @rallyhub/mobile start",
-    "backend:dev": "yarn workspace @rallyhub/backend dev",
-    "infra:synth": "yarn workspace @rallyhub/infra synth",
-    "infra:deploy": "yarn workspace @rallyhub/infra deploy",
-    "lint": "yarn workspaces run lint",
-    "test": "yarn workspaces run test",
-    "build": "yarn workspaces run build"
+    "build":         "turbo run build",
+    "test":          "turbo run test",
+    "lint":          "turbo run lint",
+    "type-check":    "turbo run type-check",
+    "dev":           "turbo run dev --parallel",
+    "mobile":        "turbo run dev --filter=@rallyhub/mobile",
+    "backend:test":  "turbo run test --filter=@rallyhub/backend",
+    "backend:native":"turbo run native --filter=@rallyhub/backend",
+    "infra:synth":   "turbo run synth --filter=@rallyhub/infra",
+    "infra:deploy":  "turbo run deploy --filter=@rallyhub/infra",
+    "clean":         "turbo run clean"
   },
   "devDependencies": {
-    "typescript": "^5.9.3"
+    "turbo":      "^2.3.0",
+    "typescript": "5.9.3"
   },
   "engines": {
     "node": ">=20.0.0",
     "yarn": ">=1.22.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }

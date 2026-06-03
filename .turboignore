@@ -1,0 +1,9 @@
+apps/backend/.gradle
+apps/backend/build
+apps/backend/gradle/wrapper/gradle-wrapper.jar
+apps/mobile/.expo
+apps/mobile/android
+apps/mobile/ios
+infra/cdk.out
+node_modules
+**/.DS_Store

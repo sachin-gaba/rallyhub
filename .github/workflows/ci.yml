@@ -7,8 +7,9 @@ on:
     branches: [main]
 
 jobs:
+  # ── Java Backend — compile + test ─────────────────────────────
   backend-test:
-    name: Backend — Test (GraalVM JDK 21)
+    name: Backend — Test (GraalVM 21)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,57 +22,69 @@ jobs:
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: gradle
-      - run: chmod +x gradlew
-      - run: ./gradlew test
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+      - name: Compile
+        run: ./gradlew compileJava compileTestJava --no-daemon
+      - name: Test
+        run: ./gradlew test --no-daemon
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: backend-test-report
           path: apps/backend/build/reports/tests/
 
-  backend-native-build:
-    name: Backend — GraalVM native compile
+  # ── Mobile — TypeScript check ─────────────────────────────────
+  mobile-type-check:
+    name: Mobile — TypeScript
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: apps/backend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '21'
-          distribution: 'graalvm-community'
-          native-image-job-reports: 'true'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          cache: gradle
-      - run: chmod +x gradlew
-      - run: ./gradlew nativeCompile
-      - run: ./gradlew packageNative
-      - uses: actions/upload-artifact@v4
-        with:
-          name: function-zip
-          path: apps/backend/build/function.zip
-
-  mobile-type-check:
-    name: Mobile — TypeScript check
-    runs-on: ubuntu-latest
+        working-directory: apps/mobile
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: yarn
-      - run: yarn install --frozen-lockfile
-      - run: cd apps/mobile && npx tsc --noEmit
+          cache: npm
+          cache-dependency-path: apps/mobile/package-lock.json
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      - name: TypeScript check
+        run: npx --yes tsc --noEmit
 
-  infra-synth:
-    name: Infra — CDK synth
+  # ── Infra — TypeScript + CDK synth ───────────────────────────
+  infra-check:
+    name: Infra — TypeScript + CDK synth
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: yarn
-      - run: yarn install --frozen-lockfile
-      - run: cd infra && npx tsc --noEmit
+          cache: npm
+          cache-dependency-path: infra/package-lock.json
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      - name: TypeScript check
+        run: npx --yes tsc --noEmit
+
+  # ── Shared types — TypeScript check ──────────────────────────
+  shared-type-check:
+    name: Shared — TypeScript
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/shared
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      - name: TypeScript check
+        run: npx --yes tsc --noEmit

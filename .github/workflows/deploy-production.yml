@@ -17,25 +17,31 @@ jobs:
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: gradle
-      - name: Build GraalVM native binary
+      - name: Build native binary
+        working-directory: apps/backend
         run: |
           chmod +x gradlew
-          ./gradlew test nativeCompile packageNative
-        working-directory: apps/backend
+          ./gradlew test nativeCompile packageNative --no-daemon
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: yarn
-      - run: yarn install --frozen-lockfile
+      - name: Install infra deps
+        working-directory: infra
+        run: npm install --legacy-peer-deps
       - name: CDK deploy (production)
-        run: cd infra && npx cdk deploy --all --context env=production --require-approval never
+        working-directory: infra
+        run: npx cdk deploy --all --context env=production --require-approval never
         env:
           AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION:    eu-west-1
 
-      - name: EAS submit (App Store + Play Store)
-        run: cd apps/mobile && npx eas submit --platform all --profile production --non-interactive
+      - name: Install mobile deps
+        working-directory: apps/mobile
+        run: npm install --legacy-peer-deps
+      - name: Submit to App Store + Google Play
+        working-directory: apps/mobile
+        run: npx eas submit --platform all --profile production --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
