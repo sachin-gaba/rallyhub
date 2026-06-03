@@ -145,7 +145,7 @@ export class RallyhubStack extends Stack {
       COGNITO_USER_POOL_ID: userPool.userPoolId,
       COGNITO_CLIENT_ID:    userPoolClient.userPoolClientId,
       SNS_TOPIC_ARN:        notificationTopic.topicArn,
-      AWS_REGION:           this.region,
+      // AWS_REGION is reserved by the Lambda runtime (injected automatically) — cannot be set here
       MICRONAUT_ENVIRONMENTS: props.deployEnv,
     };
 
@@ -173,7 +173,7 @@ export class RallyhubStack extends Stack {
     };
 
     // ── API Gateway ──────────────────────────────────────────────
-    const api = new apigw.RestApi(this, 'Api', {
+    const api = new apigw.RestApi(this, 'RestApi', {
       restApiName: `rallyhub-api-${props.deployEnv}`,
       defaultCorsPreflightOptions: {
         allowOrigins: apigw.Cors.ALL_ORIGINS,
